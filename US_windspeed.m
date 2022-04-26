@@ -79,6 +79,7 @@ usamap conus
 plotm(coastlat,coastlon,'k')
 %contourfm(u_coord(:,1), u_coord(:,2), avg_windspd,'linecolor','none');
 contourfm(u_lat,u_lon,windspd_grid','linecolor','none')
+cmocean('-ice')
 bordersm('continental us','k')
 
 %  for j = 1:length(avg_windspd)
@@ -96,5 +97,11 @@ cb.XLabel.String = 'Wind Speed (meters per second)';
 %% Create Map of Turbine Locations
 
 figure(1); hold on
+
 plotm(lat_turb,lon_turb,'r.','markersize',5)
 hold off
+% figure(2)
+% usamap conus
+% plotm(coastlat,coastlon,'k')
+% gb = bubble(lat_turb,lon_turb);
+% geolimits([22.00 50.00],[-125 -66])

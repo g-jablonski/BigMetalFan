@@ -17,7 +17,7 @@ lat = table2array(data(:,3));
 lon = table2array(data(:,2));
 windspd = table2array(data(:,9));
 
-%% Redefine resolution to be 1.00 degrees
+%% Redefine resolution to be 0.50 degrees
 
 maxlat = round(max(lat));
 minlat = round(min(lat));
