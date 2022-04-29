@@ -49,6 +49,15 @@ for k = 1:length(u_coord)
 end
 %avg_windspd = (u_coord(:,2),u_coord(:,1),avg_windspd);
 all = horzcat(u_coord,avg_windspd);
+
+%% Filter Out Non-US Data
+% for i = 1:length(u_lat)
+%     if u_lat(i) < 23.5
+%         u_lat(i) = nan
+%         u_lon
+%     end
+% end
+
 %% Create Windspeed Grid
 
 windspd_grid = nan(length(u_lon)+1,length(u_lat)+1);
@@ -58,7 +67,11 @@ windspd_grid(1,2:end) = u_lat;
 for i = 1:length(all)
     latInd = find(windspd_grid(1,:) == all(i,1));
     lonInd = find(windspd_grid(:,1) == all(i,2));
-    windspd_grid(lonInd,latInd) = all(i,3);
+    if all(i,1) < 24.5 % filter out southern-most data in Mexico
+        windspd_grid(lonInd,latInd) = nan;
+    else
+        windspd_grid(lonInd,latInd) = all(i,3);
+    end
 end
 
 windspd_grid = windspd_grid(2:end,2:end);
@@ -105,3 +118,5 @@ hold off
 % plotm(coastlat,coastlon,'k')
 % gb = bubble(lat_turb,lon_turb);
 % geolimits([22.00 50.00],[-125 -66])
+
+%% Wind Speed Variability 
