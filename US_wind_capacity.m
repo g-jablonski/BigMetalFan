@@ -32,9 +32,10 @@ end
 load coastlines
 figure(1); clf
 usamap conus
-bordersm('continental us','k')
 plotm(coastlat,coastlon,'k')
 scatterm(lat,lon,10,ratio40,'filled')
+bordersm('continental us','k')
 cb = contourcbar("southoutside");
+cmocean('matter')
 title('Percent Area with Wind Capcity Factor 40%+ (Contiguous United States)')
 cb.XLabel.String = 'Percent Area';
