@@ -47,40 +47,43 @@ file = readtable(filename);
 county_areas = table2array(file(:,2:3));
 
 %match up areas with populations
-areaIND = ismembertol(countyid,county_areas(:,1), 0);
-areas = county_areas(areaIND,:);
-countyIND = ismembertol(areas(:,1),countyid,0);
-countyid2 = countyid(countyIND);
-finalareas=NaN(length(countyid2),1);
+areaIND = ismember(countyid,county_areas(:,1));
+areasID = countyid(areaIND);
+countyIND = ismember(areasID,county_areas(:,1));
+countyid2 = county_areas(countyIND,1);
+areaID2 = county_areas(countyIND,2);
+finalareas=NaN(length(countyid2), 1);
 %Full data, geoid, area, pop, lat, lon
-for m=1:length(areas)
-    finalareas(countyid2==areas(m,1))=areas(m,2);
+for m=1:length(countyid2)
+    finalareas(areasID==countyid2(m,1))=areaID2(m,1);
 end
-Areas = finalareas'
+
+
 datapart2 = NaN(length(countyid2),2);
-datapart2(:,1)=countyid2;
-datapart2(:,2)=Areas;
+datapart2(:,1)=areasID;
+datapart2(:,2)=finalareas;
 %% Combing Population and Area Data
 finaldata=NaN(length(datapart2),7);
 
-finaldata(:,1)=datapart1(countyIND,1);
-finaldata(:,2)=datapart1(countyIND,2);
-finaldata(:,3)=datapart1(countyIND,3);
-finaldata(:,4)=datapart1(countyIND,4);
+finaldata(:,1)=datapart1(areaIND,1);
+finaldata(:,2)=datapart1(areaIND,2);
+finaldata(:,3)=datapart1(areaIND,3);
+finaldata(:,4)=datapart1(areaIND,4);
 finaldata(:,5)=datapart2(:,2);
 
-for n=1:length(finaldata);
+for n=1:length(finaldata)
     finaldata(n,6)=(finaldata(n,4))/(finaldata(n,5));
 end
 
-for q=1:length(finaldata);
+for q=1:length(finaldata)
     finaldata(q,7)=log(finaldata(q,6));
 end
 %% Replace infinite values with NaN
 
     indinf = find(isinf(finaldata(:,6)) == 1); 
     finaldata(indinf,6) = NaN;
-
+    
+    
 
 %% redefine resolution
 maxlat = round(max(finaldata(:,2)));
@@ -166,7 +169,7 @@ plotm(coastlat,coastlon,'k')
 contourfm(u_lat,u_lon,gridpop,'linecolor','none')
 bordersm('continental us','k')
 cb = contourcbar("southoutside");
-title('Log of Population Density in the Contiguous United States')
+title('Logarithm of Population Density in the Contiguous United States')
 hold on
 plotm(lat_turb,lon_turb,'r.','markersize',5)
 hold off
